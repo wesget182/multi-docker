@@ -1,0 +1,15 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t wesget182/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true USERNAME/react-test npm test
+
+after_success:
+    - docker build -t wesget182/multi-client ./client
+    - docker build -t wesget182/multi-server ./server
+    - docker build -t wesget182/multi-nginx ./nginx
+    - docker build -t wesget182/multi-worker ./worker
